@@ -4,7 +4,7 @@
 
 ## Instructor
 
-- Dr. Nikolay Oskolkov, Lund University, NBIS SciLifeLab
+- Dr. Nikolay Oskolkov, Metabolic Research Group Leader, NIRI, Riga, Latvia
 
 ## Course overview
 Next-Generation Sequencing (NGS) technologies have led to the generation of vast amounts of biological and biomedical Big Data. The rapidly expanding volume and diversity of this data present both exciting opportunities and considerable challenges for analysis. Biological Big Data from various sources, often referred to as Multi-Omics data, hold great promise due to their synergistic effects, which can potentially model the behavior of biological cells. By integrating Omics data, we can uncover novel biological pathways that may not be detectable in individual Omics datasets alone. In this course, we will explore machine learning methods for integrating large biological datasets, combining both lectures and hands-on sessions.
@@ -40,22 +40,22 @@ By completing this course, you will:
 
 
 
-## Day 1: 2 pm - 8 pm Berlin time
+## Day 1: 9.30 - 16.30 Barcelona time
 
 | Time           | Activity                                                                                   | Link                                                                                                                                        |
 |----------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| 14.00 - 14.45  | Course outline and practical information: introductions                                    | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/course-outline-and-practical-info.pdf)         |
+| 09.30 - 10.15  | Course outline and practical information: introductions                                    | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/course-outline-and-practical-info.pdf)         |
+| 10.15 - 10.30  | Break                                                                                      |                                                                                                                                             |
+| 10.30 - 11.30  | Introduction to biological Multi-Omics data integration via Machine Learning: key concepts | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/MachineLearningOmicsIntegration_Oskolkov.pdf)  |
+| 11.30 - 11.45  | Break                                                                                      |                                                                                                                                             |
+| 11.45 - 12.45  | Feature selection and supervised Omics integration                                         | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/SupervisedOmicsIntegration_Oskolkov.pdf)       |
+| 12.45 - 13.45  | Lunch                                                                                      |                                                                                                                                             |
+| 13.45 - 14.45  | Methods for univariate vs. multivariate feature selection: LASSO, PLS, LDA                 | [Lab](https://html-preview.github.io/?url=https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/blob/main/practicals/OmicsIntegration_FeatureSelection.html)                                                                                                                                                                                                                     |
 | 14.45 - 15.00  | Break                                                                                      |                                                                                                                                             |
-| 15.00 - 16.00  | Introduction to biological Multi-Omics data integration via Machine Learning: key concepts | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/MachineLearningOmicsIntegration_Oskolkov.pdf)  |
-| 16.00 - 16.15  | Break                                                                                      |                                                                                                                                             |
-| 16.15 - 17.15  | Feature selection and supervised Omics integration                                         | [Slides](https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/raw/main/slides/SupervisedOmicsIntegration_Oskolkov.pdf)       |
-| 17.15 - 17.30  | Break                                                                                      |                                                                                                                                             |
-| 17.30 - 18.30  | Methods for univariate vs. multivariate feature selection: LASSO, PLS, LDA                 | [Lab](https://html-preview.github.io/?url=https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/blob/main/practicals/OmicsIntegration_FeatureSelection.html)                                                                                                                                                                                                                     |
-| 18.30 - 18.45  | Break                                                                                      |                                                                                                                                             |
-| 18.45 - 20.00  | Methods for supervised Omics integration: mixOmics and DIABLO                              | [Lab](https://html-preview.github.io/?url=https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/blob/main/practicals/supervised_omics_integr_CLL.html)                                                                                                                                                                                                                           |
+| 15.00 - 16.30  | Methods for supervised Omics integration: mixOmics and DIABLO                              | [Lab](https://html-preview.github.io/?url=https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/blob/main/practicals/supervised_omics_integr_CLL.html)                                                                                                                                                                                                                           |
 
 
-## Day 2: 2 pm - 8 pm Berlin time
+## Day 2: 9.30 - 16.30 Barcelona time
 
 | Time           | Activity                                                                                    | Link                                                                                                                                       |
 |----------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
@@ -68,7 +68,7 @@ By completing this course, you will:
 | 18.15 - 20.00  | Methods for Omics integration via neural networks: Autoencoder                              | [Lab](https://html-preview.github.io/?url=https://github.com/NikolayOskolkov/Physalia_MLOmics_Barcelona_2025/blob/main/practicals/DeepLearningDataIntegration.html)                                                                                                                                                                                                                           |
 
 
-## Day 3: 2 pm - 8 pm Berlin time
+## Day 3: 9.30 - 16.30 Barcelona time
 
 | Time           | Activity                                                                                        | Link                                                                                                                                   |
 |----------------|-------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
