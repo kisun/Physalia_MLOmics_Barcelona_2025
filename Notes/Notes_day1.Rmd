@@ -1,0 +1,59 @@
+---
+title: "Machine Learning for Omics Integration - Day 1 Notes"
+author: "Course Notes"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+---
+
+# Key Concepts and Principles
+
+## Sample Size Considerations
+- **General Recommendation**: Sample size should be more than the number of features, ideally 10x larger
+- **Data-Model Trade-off**: The less data you have, the more modeling effort you need to invest
+- **Context-Dependent**: Sample size adequacy varies by application
+  - Some cases: 100 samples may be sufficient
+  - Other cases: Millions of samples may still be inadequate
+
+## Mathematical Framework
+
+### Linear Model Representation
+$$Y = \alpha + \beta X$$
+
+**Where:**
+- **Y** = Phenotype variable (outcome/response variable)
+- **X** = Omics data (e.g., gene expression, protein levels, metabolite concentrations)
+- **α** (alpha) = Intercept term
+- **β** (beta) = Slope coefficient/effect size
+
+### Variable Definitions
+- **Phenotype variable (Y)**: The biological trait or clinical outcome being studied
+- **Omics data (X)**: High-dimensional molecular measurements
+  - Examples: Gene expression profiles, protein abundance, metabolomics data
+
+# Important Notes
+- Quality and relevance of data often matter more than sheer quantity
+- Model complexity should be balanced with available sample size
+- Feature selection becomes crucial when dealing with high-dimensional omics data
+
+# Statistical Approaches
+
+## Frequentist Statistics
+**Core Principle**: Based on maximum likelihood estimation (MLE)
+
+### Key Characteristics:
+- **Summary Statistics Focus**: Emphasizes point estimates and confidence intervals
+- **P-value Emphasis**: Heavy reliance on p-values for hypothesis testing
+- **Limitations in Omics**:
+  - Over-focus on p-values can be problematic with high-dimensional data
+  - Multiple testing corrections become critical
+  - May not capture uncertainty effectively in complex models
+
+### Frequentist vs. Other Approaches:
+- **Advantages**: Well-established, computationally efficient for simple models
+- **Challenges**: Less flexibility for incorporating prior knowledge
+- **In Omics Context**: Can struggle with high-dimensional, low-sample-size scenarios
