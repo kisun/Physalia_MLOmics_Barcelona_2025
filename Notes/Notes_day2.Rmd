@@ -1,0 +1,9 @@
+#Day 2 Notes
+Started second lab that was left from day 1
+
+In general binary data is difficult. for eg., mutation data (there is mostly 0,1). 
+DIABLO has difficulty with such data.
+check mixomics discussion Forum 
+
+Recommended to run MOFA prior to check how different omics are related
+
