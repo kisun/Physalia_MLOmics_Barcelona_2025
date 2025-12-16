@@ -1,0 +1,50 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large data files
+*.txt
+*.csv
+*.tsv
+*.h5
+*.hdf5
+*.zip
+
+# Large presentation files
+*.ppt
+*.pptx
+*.odp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# R files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Large binary files
+*.dylib
+*.so
+*.dll

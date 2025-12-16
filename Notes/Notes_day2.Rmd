@@ -523,3 +523,90 @@ $$a^{(l)} = g(z^{(l)})$$
 - **Ensemble methods**: Random Forest, XGBoost
 - **Network-based methods**: Graph-based integration approaches
 
+## Gradient Descent and Backpropagation
+
+### Mathematical Formulation of Gradient Descent
+
+Gradient descent is the cornerstone optimization algorithm for training neural networks. The objective is to minimize the loss function $L(\theta)$ by iteratively updating parameters $\theta$ in the direction of steepest descent.
+
+**Basic Gradient Descent Update Rule:**
+
+$$\theta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t)$$
+
+Where:
+- $\theta_t$ are the parameters at iteration $t$
+- $\eta$ is the learning rate (crucial hyperparameter)
+- $\nabla_\theta L(\theta_t)$ is the gradient of the loss function with respect to parameters
+
+### Backpropagation Algorithm
+
+Backpropagation computes gradients efficiently using the chain rule of calculus. For a neural network with layers $l = 1, 2, ..., L$:
+
+**Forward Pass:**
+$$z^{(l)} = W^{(l)}h^{(l-1)} + b^{(l)}$$
+$$h^{(l)} = g(z^{(l)})$$
+
+**Backward Pass:**
+$$\delta^{(l)} = \frac{\partial L}{\partial z^{(l)}}$$
+
+For the output layer ($l = L$):
+$$\delta^{(L)} = \frac{\partial L}{\partial h^{(L)}} \odot g'(z^{(L)})$$
+
+For hidden layers ($l = L-1, L-2, ..., 1$):
+$$\delta^{(l)} = [(W^{(l+1)})^T \delta^{(l+1)}] \odot g'(z^{(l)})$$
+
+**Parameter Gradients:**
+$$\frac{\partial L}{\partial W^{(l)}} = \delta^{(l)}(h^{(l-1)})^T$$
+$$\frac{\partial L}{\partial b^{(l)}} = \delta^{(l)}$$
+
+### Numeric Implementation Considerations
+
+**1. Learning Rate Selection:**
+- Too large: oscillations, divergence
+- Too small: slow convergence
+- Common strategies: learning rate schedules, adaptive methods (Adam, RMSprop)
+
+**2. Gradient Descent Variants:**
+
+**Stochastic Gradient Descent (SGD):**
+$$\theta_{t+1} = \theta_t - \eta \nabla_\theta L_i(\theta_t)$$
+
+**Mini-batch Gradient Descent:**
+$$\theta_{t+1} = \theta_t - \eta \frac{1}{|B|} \sum_{i \in B} \nabla_\theta L_i(\theta_t)$$
+
+**Adam Optimizer:**
+$$m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t$$
+$$v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2$$
+$$\hat{m_t} = \frac{m_t}{1-\beta_1^t}, \quad \hat{v_t} = \frac{v_t}{1-\beta_2^t}$$
+$$\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v_t}} + \epsilon}\hat{m_t}$$
+
+### Learning Rate as Critical Hyperparameter
+
+The learning rate $\eta$ significantly impacts training dynamics:
+
+**Adaptive Learning Rate Strategies:**
+- **Step decay:** $\eta_t = \eta_0 \cdot \gamma^{\lfloor t/s \rfloor}$
+- **Exponential decay:** $\eta_t = \eta_0 \cdot e^{-\lambda t}$
+- **Cosine annealing:** $\eta_t = \eta_{min} + \frac{1}{2}(\eta_{max} - \eta_{min})(1 + \cos(\frac{\pi t}{T}))$
+
+**Learning Rate Scheduling for Multi-Omics:**
+Given the complexity and high dimensionality of omics data, careful learning rate management is crucial:
+- Start with higher rates for initial feature learning
+- Reduce rates as fine-tuning progresses
+- Use validation loss plateaus to trigger rate reductions
+
+### Practical Implementation for Multi-Omics Integration
+
+**Challenge-Specific Considerations:**
+
+1. **High Dimensionality:** Use gradient clipping to prevent exploding gradients
+2. **Batch Normalization:** Helps stabilize training with different omics scales
+3. **Regularization:** L1/L2 penalties added to loss function:
+   $$L_{total} = L_{data} + \lambda_1 ||W||_1 + \lambda_2 ||W||_2^2$$
+
+**Example: Multi-Modal Loss Function**
+$$L_{total} = L_{genomics} + L_{proteomics} + L_{metabolomics} + L_{integration}$$
+
+Where each component can have different learning rates:
+$$\theta_{genomics} = \theta_{genomics} - \eta_g \nabla L_{genomics}$$
+$$\theta_{proteomics} = \theta_{proteomics} - \eta_p \nabla L_{proteomics}$$
