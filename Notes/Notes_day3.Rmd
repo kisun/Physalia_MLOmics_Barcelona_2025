@@ -1,0 +1,370 @@
+---
+title: "Physalia MLOmics Barcelona 2025 - Day 3 Notes"
+subtitle: "Deep Learning for Data Integration - Final Day"
+author: "Course Participant"
+date: "December 17, 2024"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    latex_engine: xelatex
+    highlight: null
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+# Day 3 Notes
+
+## Course Start
+Started the last day with a quick recap of Lab about autoencoder.
+
+## Key Observations
+
+### RNA-seq Data Patterns
+One important note: when looking RNA-seq data, it turns out there is less difference in same tissue between two individuals than different tissues within the individual. 
+
+**Supporting References**:
+- GTEx Consortium (2013). The Genotype-Tissue Expression (GTEx) project. *Nature Genetics*, 45(6), 580-585.
+- GTEx Consortium (2015). Human genomics. The Genotype-Tissue Expression (GTEx) pilot analysis: multitissue gene regulation in humans. *Science*, 348(6235), 648-660.
+- GTEx Consortium (2017). Genetic effects on gene expression across human tissues. *Nature*, 550(7675), 204-213.
+- Mele, M., et al. (2015). Human genomics. The human transcriptome across tissues and individuals. *Science*, 348(6235), 660-665.
+
+*Note: This observation aligns with similar patterns observed in our previous analyses*
+
+### Data Preprocessing
+Simple log transformation is enough, and no normalization required for single cell data.
+
+### Framework Comparison
+Keras better than tensorflow for neural network. tensorflow is more complicated?
+
+## Deep Learning Practical Insights
+
+### Hyperparameter Optimization
+Mastering hyperparameter tuning takes time and experience.
+
+### Regularization Strategies
+Less sample size requires dropout regularization to prevent overfitting.
+
+## Dimensionality Reduction and UMAP for Omics Integration
+
+### t-SNE vs PCA Comparison
+t-SNE vs PCA: t-SNE provides more clear grouping and separation of clusters.
+
+### Purpose Beyond Visualization
+Dimensionality reduction is not just a visualization tool but an important data preprocessing step.
+
+### Linear vs Nonlinear Methods
+
+**Linear Methods**: NMF, MMDS, NMDS, SVD, SPCA, LDA, PCA, ICA, FA
+
+**Brief Descriptions**:
+- **PCA** (Principal Component Analysis): Finds orthogonal components that maximize variance in the data
+- **ICA** (Independent Component Analysis): Separates data into statistically independent components
+- **LDA** (Linear Discriminant Analysis): Supervised method that finds components maximizing class separation
+- **NMF** (Non-negative Matrix Factorization): Decomposes data into non-negative factors, useful for parts-based representation
+- **SVD** (Singular Value Decomposition): Mathematical foundation for PCA, decomposes matrix into three matrices
+- **SPCA** (Sparse PCA): PCA variant that enforces sparsity in components for better interpretability
+- **FA** (Factor Analysis): Models observed variables as linear combinations of latent factors
+- **MMDS** (Metric Multidimensional Scaling): Preserves pairwise distances when reducing dimensions
+- **NMDS** (Non-metric Multidimensional Scaling): Preserves rank order of distances rather than exact distances
+
+### Mathematical Foundations
+
+**Linear Dimensionality Reduction**: Based on matrix factorization approaches
+
+**Nonlinear Dimensionality Reduction**: Based on neighborhood graph construction
+
+#### Nonlinear Method Algorithm:
+1. Construct high-dimensional graph with probabilities **p_ij**
+2. Construct low-dimensional graph with probabilities **q_ij** 
+3. Minimize difference between graphs using **Kullback-Leibler divergence**
+
+*This approach (used in t-SNE) preserves local neighborhood structure while reducing dimensions*
+
+## PCA Implementation Steps
+
+### Step-by-Step PCA Algorithm
+
+**Algorithm Overview**:
+1. **Center the data**: Subtract mean from each feature
+2. **Calculate covariance matrix**: Compute relationships between features  
+3. **Eigendecomposition**: Find principal components and their importance
+4. **Visualize components**: Plot first two principal components
+5. **Plot explained variance**: Show how much variance each component captures
+
+### Mathematical Notation:
+- **M = X - μⱼ**: Centered data matrix (where μⱼ is the mean of feature j)
+- **A = (1/N) × M^T × M**: Covariance matrix
+- **A × u = λ × u**: Eigenvalue equation (λ = eigenvalues, u = eigenvectors)
+
+### Estimating Optimal Number of PCs
+
+**Seurat Method**: Jackstraw procedure
+- Statistical test to determine significant principal components
+- Compares observed eigenvalues to those from random data
+- Helps identify meaningful components vs. noise
+
+### PCA Limitations in Single Cell Analysis
+
+**Key Limitation**: PCA alone is often insufficient for single cell data analysis due to:
+- High sparsity and noise in single cell data
+- Complex non-linear biological relationships
+- Need for specialized normalization and scaling
+
+### Complexity and Method Performance
+
+**Simple Cases (3 classes)**:
+- Both PCA and t-SNE tell similar stories
+- Linear relationships can be captured adequately
+
+**Complex Cases (10+ classes)**:
+- t-SNE becomes more informative than PCA
+- Non-linear structure requires advanced methods
+- UMAP often superior to both
+
+### UMAP Technical Details
+
+**Key Differences from t-SNE**:
+- Uses **local connectivity** for high-dimensional probabilities
+- **Does not normalize probabilities** (computational speedup)
+- Can deliver **multiple components** for clustering downstream analysis
+- Uses **Laplacian eigenmap** for initialization (vs. random in t-SNE)
+- Uses **cross-entropy** (not Kullback-Leibler divergence) as cost function
+
+### UMAP for Data Integration
+
+**Graph Intersection Method**:
+- Constructs separate neighborhood graphs for each omics layer
+- Finds intersections between graphs to identify shared structure
+- Enables integration while preserving layer-specific information 
+
+
+### Why to Do Dimensionality Reduction?
+
+Dimensionality Reduction concept is really not just about visualization like many of use might think. This is a necessity in Data Science in order to overcome the Curse of Dimensionality, also known as Rao's paradox. What is it about? When we work with data we have n observations (samples) for p variables (features). Very often (almost always unless you are lucky) we have p>>n, i.e. we have a highly dimensional space. It turns out that the classical Frequentist statistics blows up in a highly-dimensional space, i.e. the conclusions of the models are not valid (robust) any more.
+
+## Curse of Dimensionality: Three Examples
+
+### Example 1: Low Dimensional (n=20, p=2)
+- **Normal behavior**: No spurious relationships
+- **R-squared**: 0.022 (low, appropriate)
+- **Result**: Statistics work correctly
+
+### Example 2: High Dimensional (n=20, p=10) 
+- **Overfitting begins**: Some "significant" false discoveries
+- **R-squared**: 0.659 (inflated due to overfitting)
+- **Result**: Model appears better but fits noise
+
+### Example 3: Extreme Case (n=20, p=20)
+- **Complete breakdown**: n = p (no degrees of freedom)
+- **R-squared**: 1.0 (perfect fit to noise!)
+- **Residuals**: ALL residuals = 0
+- **Standard errors**: All NaN (undefined)
+- **Result**: **Perfect interpolation of random noise**
+
+**Key Insight**: When p >= n, you can fit any data perfectly, but the model is completely meaningless. This is why dimensionality reduction is essential in omics where p >>> n.
+
+### Analysis Summary
+- **Scenario 1**: Correct behavior - no spurious relationships found
+- **Scenario 2**: False discoveries appear due to overfitting 
+- **Scenario 3**: Complete mathematical breakdown - perfect fit to pure noise!
+
+## Practical Example: PCA vs MDS on MNIST Data
+
+### MNIST Dataset Overview
+The MNIST database (Modified National Institute of Standards and Technology) contains handwritten digits (0-9) with:
+- **784 features** (28x28 pixel values)
+- **10,000+ samples** (handwritten digit images)
+- Each pixel intensity ranges from 0-255
+
+### PCA and MDS Implementation Approach
+
+**Key Steps for Analysis**:
+1. Load MNIST data and separate features from labels
+2. Take subset for computational efficiency (e.g., 1000 samples)
+3. Standardize the pixel data
+4. Compute PCA using principal component analysis
+5. Compute MDS using classical multidimensional scaling
+6. Compare the 2D representations and explained variance
+
+**Expected Results and Interpretation**:
+
+**Key Observation**: MDS gives quite similar 2D representation to PCA, and this is not surprising when considering the relationship between Euclidean distance and variance-covariance matrix.
+
+**Why PCA ~ MDS for this data**:
+1. **Mathematical relationship**: Classical MDS with Euclidean distances is equivalent to PCA
+2. **Distance preservation**: Both methods aim to preserve the most important relationships
+3. **Linear transformation**: Both use linear dimensionality reduction
+
+**Differences you might observe**:
+- **Orientation**: MDS plots may be rotated/flipped compared to PCA
+- **Scale**: Axes may have different scales
+- **Clustering**: Similar digit separation in both methods
+
+**Biological relevance**: This demonstrates why both PCA and MDS are effective for high-dimensional omics data where Euclidean relationships are meaningful.
+
+## t-distributed Stochastic Neighbor Embedding (t-SNE)
+
+### When Linear Methods Are Not Enough
+
+PCA or MDS make sense when we suspect **linear relations** between the variables in X. However, sometimes correlation between two variables can be zero - does this mean that the two variables are not related? 
+
+**No, it does not!** The relationship can be **non-linear**:
+- Quadratic relationships
+- Logarithmic relationships  
+- Sinusoidal relationships
+- Other complex non-linear patterns
+
+### Non-linear Dimensionality Reduction Techniques
+
+To discover non-linear relationships between observations, we use non-linear dimensionality reduction techniques:
+- **t-SNE** (t-distributed Stochastic Neighbor Embedding)
+- **Isomaps** 
+- **LLE** (Locally Linear Embedding)
+- **Self-Organizing Maps**
+
+Among these, **t-SNE is especially popular** in many Data Science areas due to its interesting visualization properties.
+
+### How t-SNE Works
+
+**Core Principle**: t-SNE projects high-dimensional data into low-dimensional space such that points that are **close/far in high-dimensional space** are also **close/far in low-dimensional space**.
+
+**Key Innovation**: t-SNE has its special way to measure similarity in both high- and low-dimensional spaces, using the **Gaussian law** for probability distributions.
+
+### Mathematical Foundation
+
+**High-dimensional similarities**: Uses Gaussian distribution to compute probabilities **p_ij**
+
+**Low-dimensional similarities**: Uses t-distribution to compute probabilities **q_ij**
+
+**Optimization**: Minimizes Kullback-Leibler divergence between p_ij and q_ij distributions
+
+*This approach preserves local neighborhood structure while allowing for non-linear relationships*
+
+### When to Use t-SNE vs Linear Methods
+
+Thus t-SNE is handy when it concerns **non-linear relations** between data points which **cannot be captured by PCA or MDS**.
+
+### Important Cautions About t-SNE
+
+**Distance Interpretation Warning**: Due to its highly non-linear nature, the **visual distances on the t-SNE plot do not necessarily reflect the true distances** in the high-dimensional space. In other words, it is hard to say with certainty how far or how close two clusters on the t-SNE plot are since **t-SNE distances do not have a trivial meaning**.
+
+**Feature Interpretability Limitation**: Another consequence of the non-linear transformation is that the **features that drive the clustering** on the t-SNE plot are **not easy to extract** since we are not doing any linear matrix decomposition as with PCA.
+
+### Key Differences: Linear vs Non-linear Methods
+
+| Method | Distance Meaning | Feature Extraction | Use Case |
+|--------|------------------|-------------------|-----------|
+| **PCA/MDS** | Distances preserved | Easy (loadings) | Linear relationships |
+| **t-SNE** | Distances distorted | Difficult | Non-linear relationships |
+
+**Practical Implication**: Use t-SNE for **visualization and cluster discovery**, but use PCA/MDS for **quantitative distance analysis** and **feature interpretation**.
+
+## UMAP vs t-SNE: Key Advantages
+
+### Why UMAP is Often Preferred
+
+**UMAP provides more condensed embeddings** and the **distances between clusters are more meaningful** compared to t-SNE.
+
+### Comparison: UMAP vs t-SNE
+
+| Aspect | t-SNE | UMAP |
+|--------|--------|------|
+| **Embedding Quality** | Good local structure | More condensed, preserves both local and global structure |
+| **Distance Interpretation** | Distances distorted/meaningless | Distances between clusters more meaningful |
+| **Speed** | Slower | Faster (doesn't normalize probabilities) |
+| **Components** | Typically 2D | Can deliver multiple components for clustering |
+| **Initialization** | Random | Uses Laplacian eigenmap |
+| **Cost Function** | Kullback-Leibler divergence | Cross-entropy |
+| **Global Structure** | Poor preservation | Better preservation |
+
+### UMAP Technical Advantages
+
+From earlier notes on UMAP characteristics:
+- Uses **local connectivity** for high-dimensional probabilities
+- **Does not normalize probabilities** (computational speedup)
+- Can deliver **multiple components** for downstream clustering
+- Uses **Laplacian eigenmap** for initialization
+- Uses **cross-entropy** (not KL divergence) as cost function
+
+### When to Choose Which Method
+
+- **Use UMAP** when you need:
+  - Meaningful distance interpretation between clusters
+  - Faster computation
+  - Multiple components for further analysis
+  - Better global structure preservation
+
+- **Use t-SNE** when you need:
+  - Focus purely on local neighborhood visualization
+  - Well-established, widely-used method
+  - Maximum separation of distinct clusters (may sacrifice distance meaning)
+
+**MDS = machine learning, PCA = linear algebra**
+
+# Principles of Batch Correction (ComBat-like)
+
+## Understanding Batch Effects
+
+### What are Batch Effects?
+- **Technical variation**: Non-biological differences between experimental batches
+- **Common sources**: Different processing dates, laboratory conditions, reagent lots
+- **Impact**: Can confound biological signal and lead to false discoveries
+
+### ComBat Method Overview
+- **Statistical approach**: Empirical Bayes method for batch correction
+- **Assumptions**: Batch effects follow parametric distributions
+- **Application**: Widely used for microarray and RNA-seq data
+
+## Mutual Nearest Neighbors (MNN)
+
+### Core Concept
+**Mutual Nearest Neighbors (MNN)** is a method for batch correction and data integration that identifies cells that are each other's nearest neighbors across different batches.
+
+### MNN Algorithm Steps
+
+1. **Identify MNN pairs**: Find cells that are mutual nearest neighbors between batches
+2. **Calculate correction vectors**: Compute differences between MNN pairs
+3. **Smooth correction vectors**: Apply local smoothing to avoid overcorrection
+4. **Apply corrections**: Transform batch coordinates to align datasets
+
+### Key Advantages of MNN
+
+- **Preserves biological variation**: Only corrects technical batch effects
+- **Robust to population differences**: Works when batches have different cell type compositions
+- **Single-cell friendly**: Designed specifically for sparse single-cell data
+- **Reference-free**: Does not require a reference batch
+
+### When to Use MNN vs ComBat
+
+| **Method** | **Best Use Case** | **Data Type** | **Assumptions** |
+|------------|-------------------|---------------|-----------------|
+| **ComBat** | Bulk omics data | Dense matrices | Parametric batch effects |
+| **MNN** | Single-cell data | Sparse matrices | Non-parametric, preserves cell diversity |
+
+### MNN Implementation Notes
+
+- **Distance metric**: Typically uses cosine distance for high-dimensional data
+- **Neighborhood size**: Critical parameter - affects correction strength
+- **Batch order**: Can process multiple batches sequentially
+- **Quality control**: Check that biological structure is preserved after correction
+
+## Integration Strategy Summary
+
+### Choosing the Right Approach
+
+**For Dimensionality Reduction**:
+- Use **PCA** for linear relationships and interpretability
+- Use **t-SNE** for visualization of complex clusters
+- Use **UMAP** for both visualization and downstream analysis
+
+**For Batch Correction**:
+- Use **ComBat** for bulk omics data with known batch structure
+- Use **MNN** for single-cell data with unknown population differences
+
+**For Multi-omics Integration**:
+- Combine dimensionality reduction with batch correction
+- Consider UMAP's graph intersection method for multiple omics layers
+- Validate biological interpretation after technical correction 

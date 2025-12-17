@@ -1,13 +1,16 @@
 ---
 title: "Machine Learning for Omics Integration - Day 1 Notes"
 author: "Course Notes"
-date: "`r Sys.Date()`"
-output: 
+date: "December 17, 2024"
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+    latex_engine: xelatex
+    highlight: null
   html_document:
     toc: true
     toc_float: true
-    theme: flatly
-    highlight: tango
 ---
 
 # Key Concepts and Principles
@@ -145,20 +148,20 @@ $$P(H|E) = \frac{P(E|H) \times P(H)}{P(E)}$$
 ### Standard Linear Regression (OLS)
 $$\min_{\beta} ||Y - X\beta||^2_2$$
 
-### LASSO Objective Function
+### LASSO Objective Function  
 $$\min_{\beta} ||Y - X\beta||^2_2 + \lambda ||\beta||_1$$
 
 **Where:**
-- **||Y - X\beta||²₂** = Residual Sum of Squares (RSS)
+- **||Y - X\beta||^2_2** = Residual Sum of Squares (RSS)
 - **λ** = Regularization parameter (penalty strength)
-- **||\beta||₁** = L1 penalty (sum of absolute values of coefficients)
+- **||\beta||_1** = L1 penalty (sum of absolute values of coefficients)
 
 ### L1 vs L2 Penalties
 
 | **Penalty Type** | **Mathematical Form** | **Effect** | **Use Case** |
 |------------------|----------------------|------------|--------------|
-| **L1 (LASSO)** | λ Σ\|βⱼ\| | **Feature Selection** - drives coefficients to exactly zero | Sparse solutions, interpretable models |
-| **L2 (Ridge)** | λ Σβⱼ² | **Shrinkage** - shrinks coefficients toward zero | When all features potentially relevant |
+| **L1 (LASSO)** | $\lambda \Sigma|\beta_j|$ | **Feature Selection** - drives coefficients to exactly zero | Sparse solutions, interpretable models |
+| **L2 (Ridge)** | $\lambda \Sigma\beta_j^2$ | **Shrinkage** - shrinks coefficients toward zero | When all features potentially relevant |
 
 ## LASSO in High-Dimensional Omics
 
@@ -195,11 +198,11 @@ $$\min_{\beta} ||Y - X\beta||^2_2 + \lambda_1 ||\beta||_1 + \lambda_2 ||\beta||_
 ```
 
 ### Common Mistakes to Avoid
-❌ **Wrong**: Select λ on full dataset, then evaluate performance
-✅ **Correct**: Select λ using only training data via cross-validation
+**Wrong**: Select λ on full dataset, then evaluate performance
+**Correct**: Select λ using only training data via cross-validation
 
-❌ **Wrong**: Use same data for feature selection and performance evaluation  
-✅ **Correct**: Separate feature selection from final model validation
+**Wrong**: Use same data for feature selection and performance evaluation  
+**Correct**: Separate feature selection from final model validation
 
 ### Cross-Validation Metrics for Omics
 - **Regression tasks**: MSE, MAE, R²

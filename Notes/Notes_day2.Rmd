@@ -2,22 +2,17 @@
 title: "Machine Learning for Omics Integration - Day 2 Notes"
 subtitle: "Unsupervised Multi-Omics Integration"
 author: "Course Notes"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
-    theme: flatly
-    highlight: tango
-    number_sections: true
+date: "December 17, 2024"
+output:
   pdf_document:
     toc: true
     number_sections: true
-    highlight: tango
-    keep_tex: false
+    latex_engine: xelatex
+    highlight: null
+  html_document:
+    toc: true
+    toc_float: true
 ---
-
-> **Convert to PDF**: `pandoc Notes_day2.Rmd -o Notes_day2.pdf --pdf-engine=xelatex -V mainfont="Helvetica Neue" -V monofont="Monaco" -V mathfont="TeX Gyre Termes Math" -V fontsize=12pt -V geometry:margin=1in -V linestretch=1.2`
 
 *Continuation of Day 1 laboratory session (lab 2)*
 
@@ -85,7 +80,7 @@ $$X^{(m)}_{ij} = \sum_{k=1}^{K} Z_{ik} \cdot W^{(m)}_{kj} + \epsilon^{(m)}_{ij}$
 - **Z**: Shared latent factor matrix (samples × factors) 
 - **W^(m)**: Factor loadings for omics m (factors × features)
 - **K**: Number of latent factors
-- **ε^(m)**: Noise term for omics m
+- **epsilon^(m)**: Noise term for omics m
 
 #### Bayesian Formulation
 
@@ -106,12 +101,12 @@ $$\alpha^{(m)}_k \sim \text{Gamma}(a_0, b_0)$$
 $$X^{(m)}_{ij} | Z, W^{(m)} \sim \mathcal{N}\left(\sum_{k=1}^{K} Z_{ik} W^{(m)}_{kj}, (\tau^{(m)})^{-1}\right)$$
 
 **For count data (e.g., RNA-seq):**
-$$X^{(m)}_{ij} | Z, W^{(m)} \sim \text{Poisson}\left(\exp\left(\sum_{k=1}^{K} Z_{ik} W^{(m)}_{kj}\right)\right)$$
+**X(m)_ij | Z, W(m) ~ Poisson(exp(Σ Z_ik × W(m)_kj))**
 
 **For binary data (e.g., mutations):**
-$$X^{(m)}_{ij} | Z, W^{(m)} \sim \text{Bernoulli}\left(\sigma\left(\sum_{k=1}^{K} Z_{ik} W^{(m)}_{kj}\right)\right)$$
+**X(m)_ij | Z, W(m) ~ Bernoulli(σ(Σ Z_ik × W(m)_kj))**
 
-Where σ is the sigmoid function: $\sigma(x) = \frac{1}{1 + e^{-x}}$
+Where σ is the sigmoid function: **σ(x) = 1/(1 + e^(-x))**
 
 #### Variational Inference
 
@@ -121,8 +116,8 @@ MOFA uses **variational Bayes** to approximate the posterior distribution:
 $$\mathcal{L} = \mathbb{E}_q[\log p(X, Z, W, \alpha)] - \mathbb{E}_q[\log q(Z, W, \alpha)]$$
 
 **Where:**
-- **p(X, Z, W, α)**: Joint probability of data and parameters
-- **q(Z, W, α)**: Variational approximation to posterior
+- **p(X, Z, W, alpha)**: Joint probability of data and parameters
+- **q(Z, W, alpha)**: Variational approximation to posterior
 - **ELBO**: Evidence Lower BOund (maximized during training)
 
 ### Key Advantages of MOFA
@@ -194,23 +189,18 @@ Reconstruction: X_m = Z × W_m + noise
 ### MOFA/MOFA+ Workflow
 
 #### 1. Data Preprocessing
-```r
-# Example preprocessing steps
+*Key preprocessing steps include:*
 - Log-transformation for count data
 - Feature filtering (highly variable features)
 - Normalization across samples
 - Quality control checks
-```
 
 #### 2. Model Training
-```r
-# Basic MOFA model setup
-MOFAobject <- create_mofa(data_list)
-model_opts <- get_default_model_options(MOFAobject)
-model_opts$num_factors <- 10
-train_opts <- get_default_training_options(MOFAobject)
-MOFAmodel <- run_mofa(MOFAobject, model_opts, train_opts)
-```
+*Basic MOFA model workflow involves:*
+- Creating MOFA object from data list
+- Setting model options (number of factors, etc.)
+- Configuring training parameters
+- Running the model training process
 
 #### 3. Model Analysis
 - **Factor inspection**: Which factors explain most variance?
@@ -427,10 +417,10 @@ Input Layer → Hidden Layer(s) → Output Layer
 
 | **Function** | **Formula** | **Range** | **Use Case** |
 |--------------|-------------|-----------|--------------|
-| **Sigmoid** | $\sigma(x) = \frac{1}{1+e^{-x}}$ | (0, 1) | Binary classification output |
-| **ReLU** | $\text{ReLU}(x) = \max(0, x)$ | [0, ∞) | Hidden layers (most common) |
-| **Tanh** | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ | (-1, 1) | Hidden layers (zero-centered) |
-| **Softmax** | $\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$ | (0, 1) | Multi-class output |
+| **Sigmoid** | σ(x) = 1/(1+e^(-x)) | (0, 1) | Binary classification output |
+| **ReLU** | ReLU(x) = max(0, x) | [0, ∞) | Hidden layers (most common) |
+| **Tanh** | tanh(x) = (e^x - e^(-x))/(e^x + e^(-x)) | (-1, 1) | Hidden layers (zero-centered) |
+| **Softmax** | softmax(xi) = e^(xi) / Σe^(xj) | (0, 1) | Multi-class output |
 
 #### Universal Approximation Theorem
 Multi-layer neural networks with sufficient neurons can approximate any continuous function to arbitrary accuracy.
@@ -649,43 +639,15 @@ $$\nabla f = \left[\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x
 
 **Simple Neural Network from Scratch:**
 
-```python
-import numpy as np
+*This would be implemented using Python with numpy for basic operations, including:*
+- **Sigmoid activation function** and its derivative
+- **Network initialization** with random weights
+- **Forward pass** through hidden and output layers  
+- **Backward pass** computing gradients via chain rule
+- **Weight updates** using gradient descent
+- **Training on XOR problem** as a classic non-linear example
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-def sigmoid_derivative(x):
-    return x * (1 - x)
-
-# Network parameters
-np.random.seed(42)
-weights_input_hidden = np.random.uniform(-1, 1, (2, 3))  # 2 inputs, 3 hidden neurons
-weights_hidden_output = np.random.uniform(-1, 1, (3, 1))  # 3 hidden, 1 output
-
-# Training data (XOR problem)
-X = np.array([[0,0], [0,1], [1,0], [1,1]])
-y = np.array([[0], [1], [1], [0]])
-
-# Training loop
-for epoch in range(10000):
-    # Forward pass
-    hidden_layer = sigmoid(np.dot(X, weights_input_hidden))
-    output_layer = sigmoid(np.dot(hidden_layer, weights_hidden_output))
-    
-    # Backward pass (the derivatives in action!)
-    output_error = y - output_layer
-    output_delta = output_error * sigmoid_derivative(output_layer)
-    
-    hidden_error = output_delta.dot(weights_hidden_output.T)
-    hidden_delta = hidden_error * sigmoid_derivative(hidden_layer)
-    
-    # Update weights (gradient descent)
-    weights_hidden_output += hidden_layer.T.dot(output_delta) * 0.1
-    weights_input_hidden += X.T.dot(hidden_delta) * 0.1
-
-print("Final predictions:", output_layer.round(3))
-```
+*Key insight: The entire neural network training process relies heavily on derivative calculations for the backward pass and weight updates.*
 
 ### Why Understanding Derivatives Matters for Omics
 
@@ -728,9 +690,9 @@ $$\frac{\partial L}{\partial \text{Gene}_i} \text{ vs } \frac{\partial L}{\parti
 
 **Can you compute these derivatives?**
 
-1. $\frac{d}{dx}[\sigma(wx + b)]$ where $\sigma(x) = \frac{1}{1+e^{-x}}$
-2. $\frac{\partial}{\partial w}[(y - \sigma(wx + b))^2]$
-3. Chain rule for: $\frac{\partial L}{\partial w_1}$ in a 3-layer network
+1. **d/dx[σ(wx + b)]** where **σ(x) = 1/(1+e^(-x))**
+2. **∂/∂w[(y - σ(wx + b))²]**
+3. **Chain rule for: ∂L/∂w₁** in a 3-layer network
 
 **If yes**: You're ready for ANN implementation
 **If no**: Spend 1-2 weeks on calculus review
