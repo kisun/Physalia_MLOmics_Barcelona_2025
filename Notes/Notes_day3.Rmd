@@ -368,3 +368,143 @@ From earlier notes on UMAP characteristics:
 - Combine dimensionality reduction with batch correction
 - Consider UMAP's graph intersection method for multiple omics layers
 - Validate biological interpretation after technical correction 
+
+## Advanced Single-Cell Integration Methods
+
+### Seurat CCA + Dynamic Time Warping Integration
+
+**Reference**: Butler et al. (2018), "Integrating single-cell transcriptomic data across different conditions, technologies, and species", *Nature Biotechnology*
+
+**Key Features**:
+- **Canonical Correlation Analysis (CCA)**: Identifies shared correlation structures between datasets
+- **Dynamic Time Warping (DTW)**: Aligns datasets by finding optimal matching between cells
+- **Multi-modal integration**: Can handle different data types and experimental conditions
+
+**Applications**:
+- Cross-species comparisons
+- Technology platform integration
+- Temporal data alignment
+
+### Harmony Integration Method
+
+**Reference**: Korsunsky et al. (2019), "Fast, sensitive and accurate integration of single-cell data with Harmony", *Nature Methods*
+
+**Core Principle**: 
+- **Iterative clustering approach**: All batches contribute to cluster formation where possible
+- **Soft clustering**: Cells can belong to multiple clusters with different probabilities
+- **Batch-aware correction**: Removes batch effects while preserving biological variation
+
+**Key Advantages**:
+- Fast computational performance
+- Handles large datasets efficiently
+- Preserves global structure
+- Works with multiple batch variables simultaneously
+
+**Algorithm Steps**:
+1. Initial clustering of all cells
+2. Compute batch-specific centroids
+3. Apply correction vectors to remove batch effects
+4. Repeat until convergence
+
+### Scanorama Integration Method
+
+**Reference**: Hie et al. (2019), "Efficient integration of heterogeneous single-cell transcriptomes using Scanorama", *Nature Biotechnology*
+
+**Innovation**: 
+- **All-to-all dataset matching**: Generalization of MNN to many datasets
+- **No shared cell type requirement**: Does not require at least one cell type shared across datasets
+- **Panoramic stitching approach**: Inspired by image stitching algorithms
+
+**Key Features**:
+- **Mutual nearest neighbor generalization**: Extends MNN concept beyond pairwise comparisons
+- **Robust to dataset heterogeneity**: Handles datasets with completely different cell type compositions
+- **Scalable integration**: Can integrate dozens of datasets simultaneously
+
+**Workflow**:
+1. Identify correspondences between all dataset pairs
+2. Build integration graph connecting datasets
+3. Apply batch correction using identified correspondences
+4. Merge datasets into unified embedding
+
+### Method Comparison Summary
+
+| **Method** | **Best For** | **Key Strength** | **Limitations** |
+|------------|--------------|------------------|-----------------|
+| **Seurat CCA** | Multi-condition, cross-species | Dynamic time warping alignment | Requires shared biology |
+| **Harmony** | Large-scale integration | Speed and soft clustering | May over-correct rare populations |
+| **Scanorama** | Heterogeneous datasets | No shared cell type requirement | Computational complexity |
+
+**Integration Strategy Recommendations**:
+- Use **Seurat CCA** for temporal or developmental datasets
+- Use **Harmony** for large-scale, well-characterized datasets
+- Use **Scanorama** for highly heterogeneous collections of datasets
+
+### Evidence-Based Method Selection
+
+**Complex Datasets**: Based on benchmarking studies, **Harmony** and **Scanorama** are preferred for:
+- Large-scale multi-batch datasets
+- High cellular complexity
+- Multiple experimental conditions
+- Heterogeneous populations
+
+**Simple Datasets**: **ComBat** remains effective for:
+- Low complexity data
+- Few distinct populations
+- Well-controlled batch structure
+- Bulk omics data
+
+## Vertical Integration: Cross-Omics Methods
+
+### Seurat Transfer Learning Approach
+
+**Concept**: **Transfer anchors across omics** - enables integration of different data modalities (RNA, ATAC, protein, etc.)
+
+**Key Features**:
+- **Cross-modal anchors**: Identifies shared cellular states across omics layers
+- **Reference-query framework**: Uses well-characterized reference to annotate query data
+- **Multi-modal integration**: Combines transcriptomics, epigenomics, and proteomics
+
+**Applications**:
+- Single-cell multiome analysis (RNA + ATAC)
+- CITE-seq integration (RNA + protein)
+- Cross-platform data transfer
+- Cell type annotation transfer
+
+### Workflow for Cross-Omics Integration:
+1. **Identify integration anchors** between omics modalities
+2. **Transfer information** from reference to query datasets
+3. **Validate integration** through known biological relationships
+4. **Downstream analysis** on integrated multi-omics space
+
+---
+
+## Course Summary: Key Takeaways
+
+### Day 3 Learning Objectives Achieved
+
+1. **Deep Learning Fundamentals**: 
+   - Autoencoder applications for dimensionality reduction
+   - Hyperparameter optimization strategies
+   - Regularization techniques for omics data
+
+2. **Advanced Integration Methods**:
+   - Comprehensive understanding of PCA, t-SNE, and UMAP
+   - Batch correction approaches (ComBat, MNN, Harmony, Scanorama)
+   - Multi-omics integration strategies
+
+3. **Practical Implementation**:
+   - Method selection guidelines based on data complexity
+   - Evidence-based recommendations from benchmarking studies
+   - Cross-omics integration workflows
+
+### Future Directions
+
+The field of multi-omics integration continues to evolve with:
+- **Graph-based methods** for complex biological networks
+- **Foundation models** trained on large-scale omics datasets  
+- **Causal inference** approaches for understanding biological mechanisms
+- **Real-time integration** for clinical applications
+
+**Final Note**: The choice of integration method should always be guided by the biological question, data characteristics, and computational resources available. 
+
+
